@@ -16,7 +16,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 # [1] လျှို့ဝှက်သော့များ (သင့်၏ Key အစစ်များကို ဤနေရာတွင် ထည့်ပါ)
 TELEGRAM_TOKEN = "8391208718:AAEzdJd0pdOdVFbqXr88Oh82IpRheUlqxok" 
-GEMINI_API_KEY = "AIzaSyC_zq1RlMZz93jYUm1vefzOU6m9v3lEcJY"
+GEMINI_API_KEY = "AIzaSyB_D736xeNweKkqlvcy6Kycbsg0cYcAq-c"
 
 # သင့်၏ Blogspot စာမျက်နှာ လင့်ခ်အစစ်
 BLOGSPOT_URL = "https://heinpyisoe.blogspot.com/p/copywriter-portal.html" 
@@ -26,7 +26,8 @@ logger = logging.getLogger(__name__)
 
 # AI ချိတ်ဆက်ခြင်း (Error မတက်သော gemini-pro ကို အသုံးပြုထားသည်)
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash') 
+model = genai.GenerativeModel('gemini-1.5-flash-latest
+') 
 
 # [2] Database တည်ဆောက်ခြင်း
 def init_db():
