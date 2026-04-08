@@ -26,7 +26,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - [MARKETER CORE] - 
 logger = logging.getLogger(__name__)
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash') # Copywriting အတွက် အမြန်ဆုံး Model
+model = genai.GenerativeModel('gemini-pro') # Copywriting အတွက် အမြန်ဆုံး Model
 
 # [2] Database Setup
 def init_db():
