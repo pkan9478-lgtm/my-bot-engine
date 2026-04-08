@@ -16,17 +16,18 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 # ==============================================================================
 
 # [1] Configuration Keys
-TELEGRAM_TOKEN = "8730742982:AAGm17vBkGkQPpF2_UdjHtQ5WMXgsO7QKh0"
-GEMINI_API_KEY = "AIzaSyBzPChxfKn6qCHI9GI6CVPc--I99OgVbjE"
+TELEGRAM_TOKEN = "8747236567:AAEBKPmeSWzRYabufvduiYqQv383zjErUtI"
+GEMINI_API_KEY = "AIzaSyCgbvner1x1P1Uwk5Q9LjuMNiQRWWKvcy4"
 
-# သင့်၏ Blogspot စာမျက်နှာ လင့်ခ်အစစ်ကို ထည့်ပါ
-BLOGSPOT_URL = "https://heinpyisoe.blogspot.com/p/copywriter-portal.html?m=1" 
+# သင့်၏ Blogspot စာမျက်နှာ လင့်ခ်အစစ်
+BLOGSPOT_URL = "https://heinpyisoe.blogspot.com/p/copywriter-portal.html" 
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - [MARKETER CORE] - %(message)s')
 logger = logging.getLogger(__name__)
 
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-pro') # Copywriting အတွက် အမြန်ဆုံး Model
+# အရေးကြီးသည်: Error 404 မတက်စေရန် gemini-pro ကို အသုံးပြုထားပါသည်။
+model = genai.GenerativeModel('gemini-pro') 
 
 # [2] Database Setup
 def init_db():
@@ -49,7 +50,7 @@ init_db()
 # ==============================================================================
 
 app = Flask(__name__)
-CORS(app) # Blogspot မှ Data ဆွဲယူခွင့်ပြုရန် CORS ဖွင့်ထားခြင်း
+CORS(app) 
 
 @app.route('/api/get_copy/<session_id>', methods=['GET'])
 def get_copy(session_id):
@@ -61,7 +62,7 @@ def get_copy(session_id):
     
     if result:
         copy_data = result[0]
-        # Data ပေးပြီးသည်နှင့် DB မှ ဖျက်ပစ်မည် (လုံခြုံရေးနှင့် Space သက်သာစေရန်)
+        # Data ပေးပြီးသည်နှင့် DB မှ ဖျက်ပစ်မည်
         cursor.execute("DELETE FROM copy_sessions WHERE session_id=?", (session_id,))
         conn.commit()
         conn.close()
@@ -71,7 +72,9 @@ def get_copy(session_id):
         return jsonify({"status": "error", "message": "Link expired or invalid ID."}), 404
 
 def run_flask():
-    app.run(host='0.0.0.0', port=5000, use_reloader=False)
+    # Render မှပေးသော Port ကို အလိုအလျောက် ယူရန်
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, use_reloader=False)
 
 # ==============================================================================
 # THE TELEGRAM COMMAND CENTER (အွန်လိုင်းဈေးသည်များ အသုံးပြုရန်)
@@ -102,11 +105,9 @@ async def generate_sales_copy(update: Update, context: ContextTypes.DEFAULT_TYPE
     """
 
     try:
-        # AI ဖြင့် အရောင်းစာသားဖန်တီးခြင်း
         response = model.generate_content(system_instruction)
         copy_text = response.text.strip()
 
-        # Database သို့ သိမ်းဆည်းခြင်း
         conn = sqlite3.connect('sovereign_copywriter.db')
         cursor = conn.cursor()
         cursor.execute("INSERT INTO copy_sessions (session_id, copy_text, created_at) VALUES (?, ?, ?)",
@@ -114,7 +115,6 @@ async def generate_sales_copy(update: Update, context: ContextTypes.DEFAULT_TYPE
         conn.commit()
         conn.close()
 
-        # Blogspot သို့ သွားရန် Link ထုတ်ပေးခြင်း (?id= ဖြင့် ချိတ်ဆက်သည်)
         unlock_url = f"{BLOGSPOT_URL}?id={session_id}"
         
         reply_text = (
