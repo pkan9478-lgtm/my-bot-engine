@@ -16,7 +16,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 # [1] လျှို့ဝှက်သော့များ (သင့်၏ Key အစစ်များကို ဤနေရာတွင် ထည့်ပါ)
 TELEGRAM_TOKEN = "8391208718:AAEzdJd0pdOdVFbqXr88Oh82IpRheUlqxok" 
-GEMINI_API_KEY = "AIzaSyCgbvner1x1P1Uwk5Q9LjuMNiQRWWKvcy4"
+GEMINI_API_KEY = "AIzaSyC_zq1RlMZz93jYUm1vefzOU6m9v3lEcJY"
 
 # သင့်၏ Blogspot စာမျက်နှာ လင့်ခ်အစစ်
 BLOGSPOT_URL = "https://heinpyisoe.blogspot.com/p/copywriter-portal.html" 
