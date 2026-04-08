@@ -135,5 +135,5 @@ if __name__ == "__main__":
     bot_app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
     bot_app.add_handler(CommandHandler("start", start_command))
     bot_app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), generate_sales_copy))
-    bot_app.run_polling()
+    bot_app.run_polling(drop_pending_updates=True)
 
