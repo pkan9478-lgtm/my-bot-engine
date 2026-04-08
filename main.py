@@ -12,11 +12,10 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 
 # ==============================================================================
 # SOVEREIGN AUTO-MARKETER (TELEGRAM + BLOGSPOT INTEGRATION)
-# STRICT NO-PAYWALL / 100% AD-DRIVEN ARCHITECTURE
 # ==============================================================================
 
-# [1] Configuration Keys
-TELEGRAM_TOKEN = "8747236567:AAEBKPmeSWzRYabufvduiYqQv383zjErUtI"
+# [1] လျှို့ဝှက်သော့များ (သင့်၏ Key အစစ်များကို ဤနေရာတွင် ထည့်ပါ)
+TELEGRAM_TOKEN = "8747236567:AAEBKPmeSWzRYabufvduiYqQv383zjErUtI" 
 GEMINI_API_KEY = "AIzaSyCgbvner1x1P1Uwk5Q9LjuMNiQRWWKvcy4"
 
 # သင့်၏ Blogspot စာမျက်နှာ လင့်ခ်အစစ်
@@ -25,11 +24,11 @@ BLOGSPOT_URL = "https://heinpyisoe.blogspot.com/p/copywriter-portal.html"
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - [MARKETER CORE] - %(message)s')
 logger = logging.getLogger(__name__)
 
+# AI ချိတ်ဆက်ခြင်း (Error မတက်သော gemini-pro ကို အသုံးပြုထားသည်)
 genai.configure(api_key=GEMINI_API_KEY)
-# အရေးကြီးသည်: Error 404 မတက်စေရန် gemini-pro ကို အသုံးပြုထားပါသည်။
 model = genai.GenerativeModel('gemini-pro') 
 
-# [2] Database Setup
+# [2] Database တည်ဆောက်ခြင်း
 def init_db():
     conn = sqlite3.connect('sovereign_copywriter.db')
     cursor = conn.cursor()
@@ -46,15 +45,14 @@ def init_db():
 init_db()
 
 # ==============================================================================
-# THE FLASK API (Blogspot မှ လှမ်းချိတ်မည့် တံခါးပေါက်)
+# FLASK API SERVER (Blogspot မှ လှမ်းချိတ်ရန်)
 # ==============================================================================
 
 app = Flask(__name__)
-CORS(app) 
+CORS(app) # လုံခြုံရေးကျော်ဖြတ်ရန် CORS ဖွင့်ထားခြင်း
 
 @app.route('/api/get_copy/<session_id>', methods=['GET'])
 def get_copy(session_id):
-    """Blogspot မှ ၁၅ စက္ကန့်ပြည့်လျှင် ဤနေရာသို့ လှမ်းတောင်းမည်"""
     conn = sqlite3.connect('sovereign_copywriter.db')
     cursor = conn.cursor()
     cursor.execute("SELECT copy_text FROM copy_sessions WHERE session_id=?", (session_id,))
@@ -62,7 +60,6 @@ def get_copy(session_id):
     
     if result:
         copy_data = result[0]
-        # Data ပေးပြီးသည်နှင့် DB မှ ဖျက်ပစ်မည်
         cursor.execute("DELETE FROM copy_sessions WHERE session_id=?", (session_id,))
         conn.commit()
         conn.close()
@@ -72,12 +69,12 @@ def get_copy(session_id):
         return jsonify({"status": "error", "message": "Link expired or invalid ID."}), 404
 
 def run_flask():
-    # Render မှပေးသော Port ကို အလိုအလျောက် ယူရန်
+    # Render ၏ Port ကို အလိုအလျောက် ရယူခြင်း
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, use_reloader=False)
 
 # ==============================================================================
-# THE TELEGRAM COMMAND CENTER (အွန်လိုင်းဈေးသည်များ အသုံးပြုရန်)
+# TELEGRAM BOT COMMAND CENTER
 # ==============================================================================
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
