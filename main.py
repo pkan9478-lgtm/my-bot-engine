@@ -16,7 +16,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 # ==============================================================================
 
 # [1] Configuration Keys
-TELEGRAM_TOKEN = "8730742982:AAFipzXnVzYdoiZ5ptcRYI0kWB2YADZU-Yk"
+TELEGRAM_TOKEN = "8730742982:AAGm17vBkGkQPpF2_UdjHtQ5WMXgsO7QKh0"
 GEMINI_API_KEY = "AIzaSyBzPChxfKn6qCHI9GI6CVPc--I99OgVbjE"
 
 # သင့်၏ Blogspot စာမျက်နှာ လင့်ခ်အစစ်ကို ထည့်ပါ
