@@ -26,8 +26,7 @@ logger = logging.getLogger(__name__)
 
 # AI ချိတ်ဆက်ခြင်း (Error မတက်သော gemini-pro ကို အသုံးပြုထားသည်)
 genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel('gemini-1.5-flash-latest
-') 
+model = genai.GenerativeModel('gemini-1.5-flash-latest') 
 
 # [2] Database တည်ဆောက်ခြင်း
 def init_db():
